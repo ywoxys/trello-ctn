@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Calendar, Phone, DollarSign, Hash, User, Search, Filter, CheckCircle, XCircle, Send, CreditCard, MessageSquare } from 'lucide-react';
-import { getTickets, getAtendentes, updateTicketStatus } from '../lib/supabase';
+import { getTickets, getAtendentes } from '../lib/supabase';
 import type { Atendente } from '../types';
 
 interface TicketWithAtendente {
@@ -113,31 +113,6 @@ export function HistoricoTickets() {
     });
   };
 
-  const toggleTicketStatus = async (ticketId: string, field: 'enviado' | 'pago', currentValue: boolean) => {
-    try {
-      const updates: any = { [field]: !currentValue };
-      
-      if (field === 'enviado') {
-        updates.data_envio = !currentValue ? new Date().toISOString() : null;
-      } else if (field === 'pago') {
-        updates.data_pagamento = !currentValue ? new Date().toISOString() : null;
-      }
-
-      await updateTicketStatus(ticketId, updates);
-      
-      // Atualizar estado local
-      setTickets(prev => 
-        prev.map(ticket => 
-          ticket.id === ticketId 
-            ? { ...ticket, ...updates }
-            : ticket
-        )
-      );
-    } catch (err) {
-      console.error('Erro ao atualizar status:', err);
-      setError('Erro ao atualizar status do ticket');
-    }
-  };
 
   if (loading) {
     return (
@@ -347,21 +322,18 @@ export function HistoricoTickets() {
                       <div className="flex items-center space-x-4">
                         {/* Status de envio */}
                         <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => toggleTicketStatus(ticket.id, 'enviado', ticket.enviado)}
-                            className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
+                          <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${
                               ticket.enviado
-                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                            }`}
-                          >
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
                             {ticket.enviado ? (
                               <CheckCircle className="w-4 h-4" />
                             ) : (
                               <Send className="w-4 h-4" />
                             )}
                             <span>{ticket.enviado ? 'Enviado' : 'Não enviado'}</span>
-                          </button>
+                          </div>
                           {ticket.enviado && ticket.data_envio && (
                             <span className="text-xs text-gray-500">
                               em {new Date(ticket.data_envio).toLocaleDateString('pt-BR')}
@@ -371,21 +343,18 @@ export function HistoricoTickets() {
 
                         {/* Status de pagamento */}
                         <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => toggleTicketStatus(ticket.id, 'pago', ticket.pago)}
-                            className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
+                          <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${
                               ticket.pago
-                                ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                            }`}
-                          >
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
                             {ticket.pago ? (
                               <CheckCircle className="w-4 h-4" />
                             ) : (
                               <CreditCard className="w-4 h-4" />
                             )}
                             <span>{ticket.pago ? 'Pago' : 'Não pago'}</span>
-                          </button>
+                          </div>
                           {ticket.pago && ticket.data_pagamento && (
                             <span className="text-xs text-gray-500">
                               em {new Date(ticket.data_pagamento).toLocaleDateString('pt-BR')}

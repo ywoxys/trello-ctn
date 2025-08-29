@@ -67,7 +67,7 @@ export function TicketForm({ currentTeam }: TicketFormProps) {
                 telefone: formData.telefone,
                 categoria: formData.categoria,
                 subcategoria: formData.subcategoria,
-                observacoes: formData.observacoes || undefined,
+                observacoes: formData.observacoes,
             };
 
             // Criar apenas um ticket
