@@ -38,7 +38,7 @@ export const deleteAtendente = async (id: string) => {
 };
 
 // Funções para tickets
-export const createTicket = async (ticket: Omit<Ticket, 'id' | 'created_at'>) => {
+export const createTicket = async (ticket: Omit<Ticket, 'id' | 'created_at' | 'enviado' | 'pago' | 'data_envio' | 'data_pagamento'>) => {
   const { data, error } = await supabase
     .from('tickets')
     .insert([ticket])
@@ -64,6 +64,25 @@ export const getTickets = async () => {
   return data;
 };
 
+export const updateTicketStatus = async (
+  id: string, 
+  updates: { 
+    enviado?: boolean; 
+    pago?: boolean; 
+    data_envio?: string; 
+    data_pagamento?: string; 
+  }
+) => {
+  const { data, error } = await supabase
+    .from('tickets')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
+};
 // Funções de autenticação
 export const signInWithTeam = async (equipe: string, senha: string) => {
   // Verificar se a equipe e senha estão corretas

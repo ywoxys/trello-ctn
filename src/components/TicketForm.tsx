@@ -22,6 +22,7 @@ export function TicketForm({ currentTeam }: TicketFormProps) {
     telefone: '',
     categoria: 'Link',
     subcategoria: undefined,
+    observacoes: '',
   });
 
   useEffect(() => {
@@ -66,6 +67,7 @@ export function TicketForm({ currentTeam }: TicketFormProps) {
                 telefone: formData.telefone,
                 categoria: formData.categoria,
                 subcategoria: formData.subcategoria,
+                observacoes: formData.observacoes || undefined,
             };
 
             // Criar apenas um ticket
@@ -100,6 +102,7 @@ export function TicketForm({ currentTeam }: TicketFormProps) {
                 telefone: '',
                 categoria: 'Link',
                 subcategoria: undefined,
+                observacoes: '',
             });
 
         } catch (err) {
@@ -281,6 +284,19 @@ export function TicketForm({ currentTeam }: TicketFormProps) {
                   ⚠️ Links passam por aprovação da equipe WhatsApp antes do envio
                 </p>
               )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Observações
+              </label>
+              <textarea
+                value={formData.observacoes}
+                onChange={(e) => handleInputChange('observacoes', e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                rows={3}
+                placeholder="Adicione observações sobre este ticket (opcional)"
+              />
             </div>
           </div>
 

@@ -14,6 +14,11 @@ export interface Ticket {
   telefone: string;
   categoria: 'Link' | 'Pix' | 'Outros assuntos';
   subcategoria?: 'endereco' | 'comprovantes';
+  observacoes?: string;
+  enviado: boolean;
+  pago: boolean;
+  data_envio?: string;
+  data_pagamento?: string;
   created_at: string;
 }
 
@@ -26,6 +31,7 @@ export interface TicketFormData {
   telefone: string;
   categoria: 'Link' | 'Pix' | 'Outros assuntos';
   subcategoria?: 'endereco' | 'comprovantes';
+  observacoes?: string;
 }
 
 export interface Equipe {
